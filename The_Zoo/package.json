@@ -1,9 +1,11 @@
 {
   "name": "the_zoo",
   "version": "1.0.0",
-  "description": "",
+  "description": "project Typescript",
   "main": "src/app.ts",
-  "scripts": {},
+  "scripts": {
+
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
