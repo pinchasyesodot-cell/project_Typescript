@@ -1,6 +1,8 @@
 import express, { type Application } from "express";
 import { envVars } from "./env.js";
 import dataBase from "./database.js";
+import Router from "./router.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 class Server {
     constructor(
@@ -12,6 +14,8 @@ class Server {
 
     private initMiddlewares(): void {
         this.app.use(express.json());
+        this.app.use("/api/user/", Router);
+        this.app.use(errorHandler);
     }
 
     public start = async (): Promise<void> => {
