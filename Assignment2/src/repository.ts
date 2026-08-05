@@ -1,6 +1,6 @@
 import type { ToObjectOptions } from "mongoose";
 import { UserModel } from "./database.js";
-import type { CreateUser, ReturnUser, UserQuery } from "./interface.js";
+import type { CreateUser, ReturnUser, UpdateUser, UserQuery } from "./interface.js";
 import { AppError, NotFound } from "./utils/AppError.js";
 
 export class UserRepository {
@@ -26,6 +26,23 @@ export class UserRepository {
                 throw error;
             }
             throw new AppError(`Failed to get users: ${(error as Error).message}`, 500);
+        }
+    };
+    
+    static updateUser = async (id: RequiredId, userData: UpdateUser): Promise<ReturnUser> => {
+        try {
+            const updatedUser = (await UserModel.findByIdAndUpdate(id, userData, { returnDocument: "after" }).select(
+                "-__v -createdAt -updatedAt"
+            )) as ReturnUser;
+            if (!updatedUser) {
+                throw new NotFound("User not found");
+            }
+            return updatedUser;
+        } catch (error) {
+            if (error instanceof NotFound) {
+                throw error;
+            }
+            throw new AppError(`Failed to update user: ${(error as Error).message}`, 500);
         }
     };
 

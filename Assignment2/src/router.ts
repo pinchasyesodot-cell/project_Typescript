@@ -8,6 +8,10 @@ class UserRouter {
     private initRouter = (): void => {
         this.router.post("/", UserController.createUser);
         this.router.get("/", UserController.getUsersByQuery);
+        this.router.patch(
+            "/:id",
+            UserController.updateUser
+        );
     };
 }
 

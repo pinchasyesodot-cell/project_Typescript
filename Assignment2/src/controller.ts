@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { type CreateUser, Sex, type UserQuery } from "./interface.js";
+import { type CreateUser, Sex, type UserQuery, type UpdateUser } from "./interface.js";
 import { UserService } from "./service.js";
 
 export class UserController {
@@ -21,6 +21,17 @@ export class UserController {
             req.query.sex ? (userQuery.sex = String(req.query.sex) as Sex) : null;
             const users = await UserService.getUsers(userQuery);
             res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    static updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const id: RequiredId = req.params.id as unknown as RequiredId;
+            const userData: UpdateUser = req.body;
+            const updatedUser = await UserService.updateUser(id, userData);
+            res.status(200).json(updatedUser);
         } catch (error) {
             next(error);
         }
