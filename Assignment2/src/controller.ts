@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { type CreateUser, Sex, type UserQuery, type UpdateUser } from "./interface.js";
+import { type CreateUser, Sex, type UserQuery, type RequiredId, type UpdateUser } from "./interface.js";
 import { UserService } from "./service.js";
 
 export class UserController {
@@ -37,4 +37,13 @@ export class UserController {
         }
     };
 
+    static deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const id: RequiredId = req.params.id as unknown as RequiredId;
+            const deletedUser = await UserService.deleteUser(id);
+            res.status(200).send(deletedUser);
+        } catch (error) {
+            next(error);
+        }
+    };
 }

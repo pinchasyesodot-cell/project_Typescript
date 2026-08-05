@@ -1,4 +1,4 @@
-import type { CreateUser, ReturnUser, UpdateUser, UserQuery } from "./interface.js";
+import type { CreateUser, RequiredId, ReturnDeletedUser, ReturnUser, UpdateUser, UserQuery } from "./interface.js";
 import { UserRepository } from "./repository.js";
 
 export class UserService {
@@ -28,4 +28,12 @@ export class UserService {
         }
     };
 
+    static deleteUser = async (id: RequiredId): Promise<ReturnDeletedUser> => {
+        try {
+            const deletedUser = await UserRepository.deleteUser(id);
+            return deletedUser;
+        } catch (error) {
+            throw error;
+        }
+    };
 }

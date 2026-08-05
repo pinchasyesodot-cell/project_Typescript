@@ -12,6 +12,7 @@ class UserRouter {
             "/:id",
             UserController.updateUser
         );
+        this.router.delete("/:id", UserController.deleteUser);
     };
 }
 

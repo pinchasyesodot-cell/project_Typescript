@@ -1,6 +1,6 @@
 import type { ToObjectOptions } from "mongoose";
 import { UserModel } from "./database.js";
-import type { CreateUser, ReturnUser, UpdateUser, UserQuery } from "./interface.js";
+import type { CreateUser, RequiredId, ReturnDeletedUser, ReturnUser, UpdateUser, UserQuery } from "./interface.js";
 import { AppError, NotFound } from "./utils/AppError.js";
 
 export class UserRepository {
@@ -46,4 +46,21 @@ export class UserRepository {
         }
     };
 
+    static deleteUser = async (id: RequiredId): Promise<ReturnDeletedUser> => {
+        try {
+            const deletedDoc = await UserModel.findByIdAndDelete(id).select("-__v -updatedAt");
+            if (!deletedDoc) {
+                throw new NotFound("User not found");
+            }
+            const deleteUser = deletedDoc.toJSON({ keepCreatedAt: true } as ToObjectOptions & {
+                keepCreatedAt: boolean;
+            });
+            return deleteUser as ReturnDeletedUser;
+        } catch (error) {
+            if (error instanceof NotFound) {
+                throw error;
+            }
+            throw new AppError(`Failed to delete user: ${(error as Error).message}`, 500);
+        }
+    };
 }
