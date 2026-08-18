@@ -3,6 +3,7 @@ import { envVars } from "./env.js";
 import dataBase from "./database.js";
 import Router from "./router.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import logger from "./utils/logger.js";
 
 class Server {
     constructor(
@@ -22,10 +23,10 @@ class Server {
         try {
             await dataBase.connect();
             this.app.listen(this.port, "0.0.0.0", () => {
-                console.log(`server is runing on http://localhost:${this.port}`);
+                logger.info(`server is runing on http://localhost:${this.port}`);
             });
         } catch (error) {
-            console.error("Failed to start the server:", error);
+            logger.error("Failed to start the server:", error);
             process.exit(1);
         }
     };
