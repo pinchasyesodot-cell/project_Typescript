@@ -9,18 +9,14 @@ export class Animal {
         public category: AnimalCategory
     ) {}
     eat = (food: Food): void => {
-        if (food === "meat") {
-            if (this.carnivore) {
-                console.log("the animal is eating meat");
-            } else {
-                console.log("the animal is not a carnivore");
-            }
+        if (food === "meat" && this.carnivore) {
+            console.log("the animal is eating meat");
+        } else if (food === "meat" && !this.carnivore) {
+            console.log("the animal is not a carnivore");
+        } else if (food === "vegetables" && !this.carnivore) {
+            console.log("the animal is eating vegetables");
         } else {
-            if (!this.carnivore) {
-                console.log("the animal is eating vegetables");
-            } else {
-                console.log("the animal is a carnivore and does not eat vegetables");
-            }
+            console.log("the animal is a carnivore and does not eat vegetables");
         }
     };
     print = <T>(value: T): void => {
