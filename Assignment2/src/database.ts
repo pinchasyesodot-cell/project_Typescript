@@ -1,6 +1,7 @@
 import { envVars } from "./env.js";
-import { connect, model, Schema } from "mongoose";
+import { connect, model, Schema, type ToObjectOptions } from "mongoose";
 import { Sex, type User } from "./interface.js";
+import logger from "./utils/logger.js";
 
 const MONGO_URI = envVars.MONGO_URI;
 
@@ -8,7 +9,7 @@ class Database {
     public connect = async (): Promise<void> => {
         try {
             await connect(MONGO_URI);
-            console.log("Connected to MongoDB successfully");
+            logger.info("Connected to MongoDB successfully");
         } catch (error) {
             throw error;
         }
@@ -22,12 +23,9 @@ class Database {
         {
             timestamps: true,
             toJSON: {
-                transform: (_doc, ret: Record<string, any>, options: Record<string, any>) => {
+                transform: (_doc, ret: Record<string, any>) => {
                     delete ret.__v;
                     delete ret.updatedAt;
-                    if (!options.keepCreatedAt) {
-                        delete ret.createdAt;
-                    }
                     return ret;
                 },
             },
