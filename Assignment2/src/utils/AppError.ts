@@ -8,6 +8,6 @@ export class AppError extends Error {
 
 export class NotFound extends AppError {
     constructor(message: string) {
-        super(message, 404)
+        super(message, 404);
     }
 }
